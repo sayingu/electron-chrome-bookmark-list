@@ -1,0 +1,79 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>git bHello World!</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
+    <style>
+        html {
+            display: block;
+            /* iframes are inline by default */
+            border: none;
+            /* Reset default border */
+            height: 85vh;
+            /* Viewport-relative units */
+            width: 98vw;
+        }
+
+        .main.container {
+            margin-top: 6em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ui main container">
+        <h1>크롬 브라우저 (
+            <script>document.write(process.versions.chrome)</script>) 북마크 리스트
+        </h1>
+
+        <table class="ui selectable celled table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>url</th>
+                </tr>
+            </thead>
+            <tbody>
+                <script src="file:index.js"></script>
+                <script>
+                    var list = bookmarks.roots.bookmark_bar.children
+                    for (folder of list) {
+                        console.log(folder.children);
+                        if (folder.children != null && folder.children.length && folder.children.length > 0) {
+                            for (url of folder.children) {
+                                document.write('<tr>');
+                                document.write('    <td>' + url.name + '</td>');
+                                document.write('    <td><a href="' + url.url + '" target="_blank">' + url.url + '</a></td>');
+                                document.write('</tr>');
+                            }
+                        }
+                    }
+                </script>
+            </tbody>
+        </table>
+    </div>
+    <script>window.$ = window.jQuery = require('./jquery/jquery-3.4.1.min.js');</script>
+    <script src="file:semantic/semantic.min.js"></script>
+    <script>
+        var shell = require('electron').shell;
+        // open links externally by default
+        $(document).on('click', 'a[href^="http"]', function (event) {
+            event.preventDefault();
+            shell.openExternal(this.href);
+        });
+    </script>
+    <script>
+        const myNotification = new Notification('Title', {
+            body: 'Notification from the Renderer process'
+        });
+
+        myNotification.onclick = () => {
+            console.log('Notification clicked');
+        };
+    </script>
+</body>
+
+</html>
